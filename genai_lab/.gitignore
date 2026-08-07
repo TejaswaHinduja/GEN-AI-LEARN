@@ -1,1 +1,2 @@
 .env
+genai_lab/chroma_db/
