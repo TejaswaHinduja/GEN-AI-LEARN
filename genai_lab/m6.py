@@ -2,7 +2,8 @@ from pathlib import Path
 
 import chromadb
 from google import genai
-
+from dotenv import load_dotenv
+load_dotenv()
 model_client = genai.Client()
 
 def embed_one(text):
@@ -16,7 +17,7 @@ db_path = Path(__file__).parent / "chroma_db"
 chroma_client = chromadb.PersistentClient(path=str(db_path))
 collection = chroma_client.get_collection("support_docs")
 
-question = "How long does a refund take?"
+question = "What is the customer-support phone number?"
 
 results = collection.query(
     query_embeddings=[embed_one(question)],
