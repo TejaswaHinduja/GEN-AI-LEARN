@@ -1,6 +1,7 @@
 import json
 from google import genai
-
+from dotenv import load_dotenv
+load_dotenv()
 client = genai.Client()
 
 question = "How long does a refund take?"
