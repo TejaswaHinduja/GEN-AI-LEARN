@@ -40,6 +40,20 @@ def search_support_docs(query: str) -> dict:
         ]
     }
 
+def execute_tool(call) -> dict:
+    if call.name != "search_support_docs":
+        return {"error": f"Tool is not allowed: {call.name}"}
+
+    query = call.arguments.get("query")
+
+    if not isinstance(query, str) or not query.strip():
+        return {"error": "A non-empty text query is required."}
+
+    if len(query) > 500:
+        return {"error": "Query is too long."}
+
+    return search_support_docs(query=query)
+
 search_tool = {
     "type": "function",
     "name": "search_support_docs",
@@ -81,7 +95,7 @@ first = client.interactions.create(
 call = next(step for step in first.steps if step.type == "function_call")
 print("Tool requested:", call.name, call.arguments)
 
-result = search_support_docs(**call.arguments)
+result = execute_tool(call)
 print("Tool result:", result)
 
 final = client.interactions.create(
